@@ -14,9 +14,11 @@
 
         public DateTime JoinDate { get; set; }
 
-        public bool IsDeleted { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
 
 
         public Department? Department { get; set; }
+
+        public int? CreatedUserId { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace CoreService.dtosandEnums
+﻿using CoreService.model;
+
+namespace CoreService.dtosandEnums
 {
     public class EmployeeDto
     {
@@ -15,6 +17,8 @@
         public DateTime JoinDate { get; set; }
 
         public int? CreatedUserId { get; set; }
+
+        public Department? Department { get; set; }
 
     }
 

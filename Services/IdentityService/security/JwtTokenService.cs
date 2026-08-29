@@ -17,7 +17,7 @@ namespace IdentityService.security
         public (string Token, DateTime ExpiresAt) GenerateToken(
             int userId,
             string username,
-            string role)
+            string role , List<string> permissions)
         {
             var key = _configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException(
@@ -52,7 +52,10 @@ namespace IdentityService.security
                     ClaimTypes.Role,
                     role)
             };
-
+            foreach(var permission in permissions)
+            {
+                claims.Add(new Claim("Permission", permission));
+            }
             // Create security key
             var securityKey =
                 new SymmetricSecurityKey(
