@@ -36,7 +36,15 @@ namespace IdentityService.services
 
             var role = user.UserRoles.Select(x => x.Role.Name).FirstOrDefault()?? "User";
 
-           var(tokenString, expiresAt) = _jwtTokenService.GenerateToken(user.Id , user.Username , role);
+            // 2. Extract permission codes
+            var permissions = user.UserRoles
+                .SelectMany(ur => ur.Role.RolePermissions)
+                .Select(rp => rp.Permission.Code)
+                .Distinct()
+                .ToList();
+
+
+            var (tokenString, expiresAt) = _jwtTokenService.GenerateToken(user.Id , user.Username , role , permissions);
 
             return new LoginResponce
             {
@@ -45,6 +53,7 @@ namespace IdentityService.services
                 ExperiedAt = expiresAt,
                 Role = role,
                 Token = tokenString,
+                Permission = permissions
 
             };
 

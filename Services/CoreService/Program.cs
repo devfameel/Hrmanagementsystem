@@ -1,3 +1,6 @@
+using CoreService.Middleware;
+using CoreService.services;
+using CoreService.services.interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -35,7 +38,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

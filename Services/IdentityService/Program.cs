@@ -5,6 +5,7 @@ using IdentityService.services;
 using IdentityService.services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -44,6 +45,21 @@ builder.Services
                 Encoding.UTF8.GetBytes(jwtKey))
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+
+    options.AddPolicy("CanCreateEmployee", policy => policy.RequireClaim("Permission", "employee:create"));
+
+    options.AddPolicy("CanEditEmployee", policy => policy.RequireClaim("Permission", "employee:edit"));
+
+    options.AddPolicy("CanDeleteEmployee", policy => policy.RequireClaim("Permission", "employee:delete"));
+
+    options.AddPolicy("CanViewEmployee", policy => policy.RequireClaim("Permission", "employee:read"));
+
+});
+      
+
 
 builder.Services.AddAuthorization();
 
