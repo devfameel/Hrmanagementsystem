@@ -1,0 +1,18 @@
+# .NET Core
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Node.js (Frontend)
+node_modules/
+dist/
+build/
+.env
+.angular/
+.next/
+
+# Misc
+.DS_Store
+*.log

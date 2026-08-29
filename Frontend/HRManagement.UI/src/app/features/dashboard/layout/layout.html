@@ -1,0 +1,30 @@
+<div class="dashboard-wrapper">
+  
+  <!-- LEFT SIDE: Sidebar Menu -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>HR System</h2>
+    </div>
+
+    <nav class="menu">
+      @for (item of menuItems; track item.id) {
+        <a [routerLink]="item.route" routerLinkActive="active" class="menu-item">
+          <span class="icon">{{ item.icon }}</span>
+          <span class="text">{{ item.name }}</span>
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <!-- RIGHT SIDE: Main Content -->
+  <main class="content-area">
+    <header class="top-nav">
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </header>
+
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+</div>

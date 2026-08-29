@@ -1,0 +1,253 @@
+<div class="login-page">
+
+  <!-- LEFT SIDE -->
+  <section class="login-section">
+
+    <div class="login-box">
+
+      <div class="logo">
+        HR
+      </div>
+
+      <div class="login-header">
+
+        <h1>Welcome Back</h1>
+
+        <p>
+          Sign in to your account to continue
+        </p>
+
+      </div>
+
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+        <!-- UserName -->
+
+        <div class="form-group">
+
+          <label for="username">
+            Email Address
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">
+              
+            </span>
+
+            <input
+              id="username"
+              type="text"
+              formControlName="username"
+              placeholder="User Name"
+            />
+
+          </div>
+
+          <small
+            *ngIf="
+              loginForm.get('username')?.touched &&
+              loginForm.get('username')?.invalid
+            "
+          >
+            Please enter a valid username.
+          </small>
+
+        </div>
+
+
+        <!-- Password -->
+
+        <div class="form-group">
+
+          <label for="password">
+            Password
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">
+              🔒
+            </span>
+
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter your password"
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+
+          </div>
+
+          <small
+            *ngIf="
+              loginForm.get('password')?.touched &&
+              loginForm.get('password')?.invalid
+            "
+          >
+            Password is required.
+          </small>
+
+        </div>
+
+
+        <!-- Error -->
+
+        <div
+          class="error-message"
+          *ngIf="errorMessage"
+        >
+          {{ errorMessage }}
+        </div>
+
+
+        <!-- Button -->
+
+        <button
+          class="login-button"
+          type="submit"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+
+          <span *ngIf="!isLoading">
+            SIGN IN
+          </span>
+
+          <span *ngIf="isLoading">
+            SIGNING IN...
+          </span>
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- RIGHT SIDE -->
+
+  <section class="company-section">
+
+    <div class="company-content">
+
+      <div class="company-badge">
+        HR MANAGEMENT PLATFORM
+      </div>
+
+
+      <h2>
+
+        YOUR COMPANY
+
+        <span>
+          HR SYSTEM
+        </span>
+
+      </h2>
+
+
+      <p class="company-description">
+
+        A centralized platform to manage your employees,
+        departments, attendance, leave and organizational
+        operations efficiently.
+
+      </p>
+
+
+      <!-- Features -->
+
+      <div class="features">
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            👥
+          </div>
+
+          <div>
+
+            <h3>
+              Employee Management
+            </h3>
+
+            <p>
+              Manage employee information from one place.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            📊
+          </div>
+
+          <div>
+
+            <h3>
+              Smart Dashboard
+            </h3>
+
+            <p>
+              Get a clear overview of your organization.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🔐
+          </div>
+
+          <div>
+
+            <h3>
+              Secure Access
+            </h3>
+
+            <p>
+              Role and permission based access control.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="company-footer">
+
+        <div class="footer-line"></div>
+
+        <p>
+          © 2026 Your Company. All rights reserved.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
