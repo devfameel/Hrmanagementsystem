@@ -17,42 +17,35 @@ namespace CoreService.controller
         }
 
         [HttpGet]
-        [Authorize(Policy = "CanViewEmployee")]
-        public async Task<IActionResult> GetEmployees(int PageNumber = 1 , int PageSixze = 15 ,CancellationToken ct = default)
+        public async Task<IActionResult> GetEmployees([FromQuery] PaginationQuery query)
         {
-            var result = await _service.GetAllEmployeeAsync(PageNumber, PageSixze, ct);
+            var result = await _service.GetAllEmployeeAsync(query.pageNumber, query.pageSize, default);
             return Ok(result);
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Policy = "CanViewEmployee")]
-
-        public async Task<IActionResult> GetemployeeByIdAsync(int id , CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetemployeeByIdAsync(int id)
         {
-            var rressult = await _service.GetEmployeebyIdAsync(id, cancellationToken);
-
+            var rressult = await _service.GetEmployeebyIdAsync(id, default);
             return Ok(rressult);
         }
 
         [HttpGet("search")]
-        [Authorize(Policy = "CanViewEmployee")]
-        public async Task<IActionResult> GetEmployyBySearchAsync(string input , CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetEmployyBySearchAsync([FromQuery] string input)
         {
-            var result = await _service.SearchEmployeeAync(input, cancellationToken);
+            var result = await _service.SearchEmployeeAync(input, default);
             return Ok(result);
         }
 
-        [HttpPost("create employee")]
-        [Authorize(Policy = "CanCreateEmployee")]
-        public async Task<IActionResult> CreateEmployeeAsync(CreateEmployeeDto input , CancellationToken ct = default)
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployeeAsync([FromBody] CreateEmployeeDto input)
         {
-            var result = await _service.CreateEmployeeAsync(input, ct);
+            var result = await _service.CreateEmployeeAsync(input, default);
             return Ok(result);
 
         }
 
-        [HttpPut("{id : int}")]
-        [Authorize(Policy = "CanEditEmployee")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateEmployeesync(int id , EmployeeDto input , CancellationToken ct = default)
         {
             var result = await _service.UpdateEmployeeAsync(id,input, ct);
@@ -68,7 +61,6 @@ namespace CoreService.controller
             return Ok(result);
         }
         [HttpDelete("{id:int}")]
-        [Authorize(Policy = "CanDeleteEmployee")]
         public async Task<IActionResult> DeleteEmployeeAsync(int id , CancellationToken ct = default)
         {
             var result = await _service.DeleteEmployeeAsync(id, ct);

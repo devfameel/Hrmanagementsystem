@@ -6,9 +6,9 @@
 
         public string Name { get; set; }
 
-        public string? DepartemntCode { get; set; } = string.Empty;
+        public string DepartemntCode { get; set; } = string.Empty;
 
-        public bool? IsDeleted { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
 
         public DateTime? CreatedDate { get; set; }
 

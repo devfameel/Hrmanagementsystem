@@ -49,6 +49,13 @@ builder.Services
 builder.Services.AddAuthorization(options =>
 {
 
+    //=======================================
+
+    //Employee
+
+    //=========================================
+
+
     options.AddPolicy("CanCreateEmployee", policy => policy.RequireClaim("Permission", "employee:create"));
 
     options.AddPolicy("CanEditEmployee", policy => policy.RequireClaim("Permission", "employee:edit"));
@@ -56,6 +63,28 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CanDeleteEmployee", policy => policy.RequireClaim("Permission", "employee:delete"));
 
     options.AddPolicy("CanViewEmployee", policy => policy.RequireClaim("Permission", "employee:read"));
+
+    //=======================================
+
+    //Department
+
+    //=========================================
+
+    options.AddPolicy("CanCreateDep", policy => policy.RequireClaim("Permission", "department:create"));
+
+    options.AddPolicy("CanEditDep", policy => policy.RequireClaim("Permission", "department:edit"));
+
+    options.AddPolicy("CanDeleteDep", policy => policy.RequireClaim("Permission", "department:delete"));
+
+    options.AddPolicy("CanViewDep", policy => policy.RequireClaim("Permission", "department:read"));
+    //=======================================
+
+    //
+
+    //=========================================
+
+
+
 
 });
       

@@ -141,6 +141,8 @@
   font-weight: 600;
   padding: 5px 12px;
   border-radius: 999px;
+  background: #DCEEFB;
+  color: #1E5F8F;
 }
 
 .id-cell {
@@ -270,46 +272,4 @@
   color: #6B7E92;
   font-weight: 600;
   cursor: pointer;
-}
-
-.dropdown-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #FFFFFF;
-  border: 1px solid #DCEEFB;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  margin-top: 4px;
-  padding: 6px 0;
-  list-style: none;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-}
-
-.dropdown-list li {
-  padding: 10px 14px;
-  font-size: 14px;
-  color: #2C4257;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.dropdown-list li:hover {
-  background: #F5FAFE;
-}
-
-.dropdown-list li.add-new {
-  color: #3E76A8;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-top: 1px solid #DCEEFB;
-  background: #F9FCFF;
-}
-.dropdown-list li.add-new:hover {
-  background: #EAF3FC;
 }

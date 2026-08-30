@@ -29,7 +29,7 @@ namespace CoreService.services
                 pageSize = 15;
 
             }
-            var query = _context.Employees.Where(x => !x.IsDeleted).AsNoTracking();
+            var query = _context.Employees.Include(x => x.Department).Where(x => !x.IsDeleted).AsNoTracking();
 
             var totalCount = await query.CountAsync(ct);
 
@@ -174,7 +174,7 @@ namespace CoreService.services
 
             var searchInput = input.Trim();
 
-            var employee = await _context.Employees.AsNoTracking()
+            var employee = await _context.Employees.Include(x => x.Department).AsNoTracking()
                 .Where(x => !x.IsDeleted && (
                   x.FirstName.Contains(searchInput)
                   ||x.LastName.Contains(searchInput)

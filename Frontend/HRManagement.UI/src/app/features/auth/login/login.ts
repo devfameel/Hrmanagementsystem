@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(Auth);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]]
@@ -38,12 +39,14 @@ export class Login {
           console.log('Login successful', response);
           localStorage.setItem('token', response.token);
           this.isLoading = false;
+          this.cdr.detectChanges();
           this.router.navigate(['/dashboard']);
         },
         error: (err: any) => {
           console.error('Login failed', err);
           this.errorMessage = 'Invalid username or password.';
           this.isLoading = false;
+          this.cdr.detectChanges();
         }
       });
     } else {

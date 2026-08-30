@@ -1,1 +1,199 @@
-<p>employee works!</p>
+<div class="header-row">
+  <div class="header-title">
+    <h1>Employees</h1>
+    <p>{{ totalCount || 0 }} people across your organization</p>
+  </div>
+
+  <div class="header-actions">
+    <div class="search-bar">
+      <!-- Search Icon -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B0A88F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" [value]="searchQuery" (input)="onSearchChange($event)" placeholder="Search employees...">
+    </div>
+
+    <button class="btn-primary" (click)="openAddModal()">
+      <!-- Plus Icon -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Add Employee
+    </button>
+  </div>
+</div>
+
+<div class="table-card">
+  <div style="overflow-x: auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>ID</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading) {
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 48px; color: #B4AC97;">Loading employees...</td>
+          </tr>
+        } @else if (employees.length === 0) {
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 48px; color: #B4AC97;">
+              No employees match "{{ searchQuery }}".
+            </td>
+          </tr>
+        } @else {
+          @for (emp of employees; track emp.id) {
+            <tr>
+              <td>
+                <div class="emp-name-cell">
+                  <div class="avatar" [style.background]="getAvatarColor(emp.firstName + ' ' + emp.lastName)">
+                    {{ getInitials(emp.firstName, emp.lastName) }}
+                  </div>
+                  <span class="emp-name">{{ emp.firstName }} {{ emp.lastName }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="email-cell">
+                  <!-- Mail Icon -->
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C6BFA9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  {{ emp.email }}
+                </div>
+              </td>
+              <td>
+                <span class="dept-badge" 
+                      [style.background]="getDeptColors(emp.department?.name).bg"
+                      [style.color]="getDeptColors(emp.department?.name).fg">
+                  {{ emp.department?.name || 'No Dept' }}
+                </span>
+              </td>
+              <td class="id-cell">EMP{{ emp.id | number:'3.0' }}</td>
+              <td>
+                <div class="actions-cell">
+                  <button class="btn-icon edit" (click)="openEditModal(emp)">
+                    <!-- Pencil Icon -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="btn-icon delete" (click)="deleteEmployee(emp.id)">
+                    <!-- Trash2 Icon -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      <line x1="10" y1="11" x2="10" y2="17"></line>
+                      <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="btn-page" (click)="prevPage()" [disabled]="currentPage === 1">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Previous
+    </button>
+    <span style="font-size: 13.5px; color: #B4AC97;">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn-page" (click)="nextPage()" [disabled]="currentPage === totalPages || totalPages === 0">
+      Next
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+
+@if (isModalOpen) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <h3>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h3>
+      
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" formControlName="firstName" class="form-control" placeholder="Enter first name">
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" formControlName="lastName" class="form-control" placeholder="Enter last name">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" formControlName="email" class="form-control" placeholder="Enter email address">
+        </div>
+
+        <div class="form-group" style="position: relative;">
+          <label>Department</label>
+          <input type="text" 
+                 class="form-control" 
+                 placeholder="Search or add department" 
+                 [value]="deptSearchText" 
+                 (input)="onDeptSearch($event)" 
+                 (focus)="showDeptDropdown = true" 
+                 (blur)="hideDeptDropdown()">
+                 
+          @if (showDeptDropdown) {
+            <ul class="dropdown-list">
+              @for (dept of filteredDepartments; track dept.id) {
+                <li (mousedown)="selectDepartment(dept)">{{ dept.name }}</li>
+              }
+              @if (filteredDepartments.length === 0 && deptSearchText) {
+                <li class="add-new" (mousedown)="quickAddDepartment()">+ Add "{{ deptSearchText }}"</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="employeeForm.invalid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (isDeptModalOpen) {
+  <div class="modal-backdrop" style="z-index: 1050;">
+    <div class="modal">
+      <h3>Add Department</h3>
+      
+      <form [formGroup]="departmentForm" (ngSubmit)="onDeptSubmit()">
+        <div class="form-group">
+          <label>Department Name</label>
+          <input type="text" formControlName="name" class="form-control" placeholder="Enter department name">
+        </div>
+
+        <div class="form-group">
+          <label>Department Code</label>
+          <input type="text" formControlName="departemntCode" class="form-control" placeholder="E.g. ENG, HR, etc">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeDeptModal()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="departmentForm.invalid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
